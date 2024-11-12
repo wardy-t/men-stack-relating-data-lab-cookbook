@@ -1,18 +1,27 @@
-
 const express = require('express');
 const router = express.Router();
-const User = require('../models/user.js');
+const User = require('../models/user'); 
 
-router.get('/', (req, res) => {
-  User.find()
-    .then(users => res.render('users/index.ejs', { users }))
-    .catch(err => res.redirect('/'));
+// Index route to display all users
+router.get('/', async (req, res) => {
+  try {
+    const users = await User.find({});
+    res.render('users/index', { users });
+  } catch (error) {
+    console.error(error);
+    res.redirect('/');
+  }
 });
 
-router.get('/:id', (req, res) => {
-  User.findById(req.params.id)
-    .then(user => res.render('users/show.ejs', { foods: user.pantry }))
-    .catch(err => res.redirect('/'));
+
+router.get('/:id', async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id); 
+    res.render('users/show', { user });
+  } catch (error) {
+    console.error(error);
+    res.redirect('/users');
+  }
 });
 
 module.exports = router;

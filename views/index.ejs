@@ -1,25 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home Page</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>Freezy</title>
 </head>
-<body>
-  <% if (user) { %>
-    <h1>Welcome to iPantry, <%= user.username %>!</h1>
-    <p>
-      <a href="/users/<%= user._id %>/foods">Go to My Pantry</a>
-    </p>
-    <p>
-      <a href="/auth/sign-out">Sign out</a>
-    </p>
-  <% } else { %>
-    <h1>Welcome to iPantry, guest.</h1>
-    <p>
-      <a href="/auth/sign-up">Sign up</a> or
-      <a href="/auth/sign-in">Sign in</a>.
-    </p>
-  <% } %>
+<body class="bg-light">
+    <%- include('./partials/_navbar.ejs') %>
+
+    <div class="container mt-5 text-center">
+        <h1 class="display-4 text-info">iPantry</h1>
+        <p class="lead">A food tracking tool.</p>
+        
+        <div class="mt-4">
+            <a href="/auth/sign-up" class="btn btn-primary btn-lg mr-2">Sign Up</a>
+            <a href="/auth/sign-in" class="btn btn-secondary btn-lg">Sign In</a>
+        </div>
+    </div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

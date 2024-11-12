@@ -1,30 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Pantry</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>Your Fridge</title>
 </head>
 <body>
-  <%- include('../partials/_navbar.ejs') %>
-  <h1>Welcome to My Pantry</h1>
-  
-  <% if (pantry.length > 0) { %>
-    <ul>
-      <% pantry.forEach(food => { %>
-        <li>
-          <%= food.name %>
-          <form action="/users/<%= user._id %>/foods/<%= food._id %>?_method=DELETE" method="POST">
-            <button type="submit">Delete</button>
-          </form>
-          <a href="/users/<%= user._id %>/foods/<%= food._id %>/edit">Edit</a>
-        </li>
-      <% }) %>
-    </ul>
-  <% } else { %>
-    <p>There are no items in this pantry.</p>
-  <% } %>
-  
-  <a href="/users/<%= user._id %>/foods/new">Add New Item</a>
+    <body class="bg-light">
+        <%- include('../partials/_navbar.ejs') %>
+        <div class="container mt-5">
+            <h1 class="text-center text-info">Your Pantry</h1>
+            <a href="/users/<%= user._id %>/foods/new" class="btn btn-primary mb-3">Add Food</a>
+            
+            <ul class="list-group">
+                <% foods.forEach((food) => { %>
+                    <li class="list-group-item shadow-sm">
+                        <a href="/users/<%= user._id %>/foods/<%= food._id %>" class="text-decoration-none">
+                            <h5 class="m-0"><%= food.name %></h5>
+                        </a>
+                    </li>
+                <% }); %>
+            </ul>
+        </div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

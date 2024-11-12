@@ -1,62 +1,99 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/user.js');
-const { Food } = require('../models/user');
 
-router.get('/', (req, res) => {
-  User.findById(req.session.user._id)
-    .then(user => res.render('foods/index.ejs', { foods: user.pantry }))
-    .catch(err => res.redirect('/'));
+const User = require('../models/user');
+
+router.get('/new', async (req, res) => {
+    res.render('foods/new.ejs');
 });
 
 router.get('/', async (req, res) => {
     try {
-      const pantry = await Food.find({ userId: req.session.user._id });
-      res.render('foods/index.ejs', { pantry });
-    } catch (error) {
-      console.error("Error fetching pantry items:", error);
-      res.status(500).send("Internal Server Error");
+        const currentUser = await User.findById(req.session.user._id);
+
+        res.render('foods/index.ejs', {
+            foods: currentUser.foods,
+
+        });
+    }   catch (error) {
+        console.log(error);
+        res.redirect('/');
     }
-  });
-
-router.post('/', (req, res) => {
-  User.findById(req.session.user._id)
-    .then(user => {
-      user.pantry.push(req.body);
-      return user.save();
-    })
-    .then(() => res.redirect(`/users/${req.session.user._id}/foods`))
-    .catch(err => res.redirect('/'));
 });
 
-router.get('/:itemId/edit', (req, res) => {
-  User.findById(req.session.user._id)
-    .then(user => {
-      const food = user.pantry.id(req.params.itemId);
-      res.render('foods/edit.ejs', { food });
-    })
-    .catch(err => res.redirect('/'));
+router.get('/:foodId', async (req, res) => {
+    try {
+        const currentUser = await User.findById(req.session.user._id);
+        const food = currentUser.foods.id(req.params.foodId);
+
+        res.render('foods/show.ejs', {
+            food: food,
+        });
+    }   catch (error) {
+        console.log(error);
+        res.redirect('/');
+    }
 });
 
-router.put('/:itemId', (req, res) => {
-  User.findById(req.session.user._id)
-    .then(user => {
-      const food = user.pantry.id(req.params.itemId);
-      food.set(req.body);
-      return user.save();
-    })
-    .then(() => res.redirect(`/users/${req.session.user._id}/foods`))
-    .catch(err => res.redirect('/'));
+
+
+router.post('/', async (req, res) => {
+    try {
+        console.log(req.body)
+        const currentUser = await User.findById(req.session.user._id);
+        
+        currentUser.foods.push(req.body);
+
+        await currentUser.save();
+
+        res.redirect(`/users/${currentUser._id}/foods`);
+    }   catch (error) {
+        console.log(error);
+        res.redirect('/');
+    }
 });
 
-router.delete('/:itemId', (req, res) => {
-  User.findById(req.session.user._id)
-    .then(user => {
-      user.pantry.id(req.params.itemId).remove();
-      return user.save();
-    })
-    .then(() => res.redirect(`/users/${req.session.user._id}/foods`))
-    .catch(err => res.redirect('/'));
+router.get('/:foodId/edit', async (req, res) => {
+    try {
+        const currentUser = await User.findById(req.session.user._id);
+        const food = currentUser.foods.id(req.params.foodId);
+
+        res.render('foods/edit.ejs', {
+            food: food,
+        })
+    }   catch (error) {
+        console.log(error);
+        res.redirect('/');
+    }
+});
+
+router.put('/:foodId', async (req, res) => {
+    try {
+        const currentUser = await User.findById(req.session.user._id);
+        const food = currentUser.foods.id(req.params.foodId);
+
+        food.set(req.body);
+
+        await currentUser.save();
+
+        res.redirect(`/users/${currentUser._id}/foods/${req.params.foodId}`);
+    }   catch (error) {
+        console.log(error);
+        res.redirect('/');
+    }
+});
+
+router.delete('/:foodId', async (req, res) => {
+    try {
+        const currentUser = await User.findById(req.session.user._id);
+        currentUser.foods.id(req.params.foodId).deleteOne();
+        await currentUser.save();
+
+        res.redirect(`/users/${currentUser._id}/foods`);
+    } catch(error) {
+        console.log(error);
+        res.redirect('/');
+    }
 });
 
 module.exports = router;

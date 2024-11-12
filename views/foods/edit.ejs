@@ -1,18 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Edit Pantry Item</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>Edit Food</title>
 </head>
-<body>
-  <%- include('../partials/_navbar.ejs') %>
-  <h1>Edit Item in Pantry</h1>
-  
-  <form action="/users/<%= user._id %>/foods/<%= food._id %>?_method=PUT" method="POST">
-    <label for="name">Food Name:</label>
-    <input type="text" id="name" name="name" value="<%= food.name %>" required>
-    <button type="submit">Update Item</button>
-  </form>
+<body class="bg-light">
+    <%- include('../partials/_navbar.ejs') %>
+    <div class="container mt-5">
+        <h1 class="text-center text-info">Edit <%= food.name %></h1>
+
+        <form action="/users/<%= user._id %>/foods/<%= food._id %>?_method=PUT" method="POST">
+            <div class="form-group">
+                <label for="food">Food:</label>
+                <input type="text" name="name" id="food" class="form-control" value="<%= food.name %>" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Update Food</button>
+        </form>
+    </div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
